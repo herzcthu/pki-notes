@@ -104,6 +104,19 @@ openssl ca -config openssl.cnf -extensions v3_intermediate_ca \
 chmod 444 intermediate/certs/intermediate.cert.pem
 ```
 
+# Verify intermediate CA cert with root CA
+```
+openssl verify -CAfile certs/ca.cert.pem \
+      intermediate/certs/intermediate.cert.pem
+```
+
+# Create CA cert chain
+```
+cat intermediate/certs/intermediate.cert.pem \
+      certs/ca.cert.pem > intermediate/certs/ca-chain.cert.pem
+chmod 444 intermediate/certs/ca-chain.cert.pem
+```
+
 # Create client private key, CSR and certificate and sign with CA
 
 ```
