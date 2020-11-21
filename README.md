@@ -124,17 +124,23 @@ chmod 444 intermediate/certs/ca-chain.cert.pem
 #Create Client Cert private key
 openssl genrsa -des3 -out example.key 2048
 
-openssl genrsa -des3 -out example.key 2048
-
 #Remove passphrase
 openssl rsa -in example.key -out example.key.insecure
 
 
 #Create CSR
-openssl req -new -key example.key.insecure -out example.csr -config openssl.cnf
+# openssl req -new -key example.key.insecure -out example.csr -config openssl.cnf
+openssl req -config intermediate/openssl.cnf \
+      -key example.key \
+      -new -sha256 -out example.csr
+
 
 #Create Certificate using CA and CSR
-openssl ca -in example.csr -config openssl.cnf
+# openssl ca -in example.csr -config openssl.cnf
+openssl ca -config intermediate/openssl.cnf \
+      -extensions server_cert -days 375 -notext -md sha256 \
+      -in example.csr \
+      -out example.cert
 
 # convert to p12 file
 openssl pkcs12 -export -inkey cert_key_pem.txt -in cert_key_pem.txt -out cert_key.p12
