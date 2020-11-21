@@ -20,6 +20,10 @@
 * Individual Validation (IV) verifies the identity of the individual person requesting the certificate.
 * Extended Validation (EV), like OV, verifies the identity of an organization. However, EV represents a higher standard of trust than OV and requires more rigorous validation checks to meet the standard of the CA/Browser Forum’s Extend.
 
+## Create self-signed certificate
+```
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/selfsigned.key -out /etc/ssl/certs/selfsigned.crt
+```
 
 ## Instruction for self-signed CA
 ```
