@@ -13,6 +13,13 @@
 * Certificate signing request (CSR)
 * Certificate revocation list (CRL)
 
+## Certifiate types
+
+* Domain Validation (DV) is the lowest level of validation, and verifies that whoever requests the certificate controls the domain that it protects.
+* Organization Validation (OV) verifies the identity of the organization (e.g. a business, nonprofit, or government organization) of the certificate applicant.
+* Individual Validation (IV) verifies the identity of the individual person requesting the certificate.
+* Extended Validation (EV), like OV, verifies the identity of an organization. However, EV represents a higher standard of trust than OV and requires more rigorous validation checks to meet the standard of the CA/Browser Forum’s Extend.
+
 
 ## Instruction for self-signed CA
 ```
