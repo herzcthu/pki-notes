@@ -54,6 +54,55 @@ openssl req -config openssl.cnf \
       -out certs/ca.cert.pem
       
 ```
+# Prepare for intermediate CA
+```
+mkdir /root/ca/intermediate
+cd /root/ca/intermediate
+mkdir certs crl csr newcerts private
+chmod 700 private
+touch index.txt
+echo 1000 > serial
+# Create CRL number to track CRL
+echo 1000 > /root/ca/intermediate/crlnumber
+```
+# Create and update openssl.conf for intermediate CA with above directory
+```
+[ CA_default ]
+dir             = /root/ca/intermediate
+private_key     = $dir/private/intermediate.key.pem
+certificate     = $dir/certs/intermediate.cert.pem
+crl             = $dir/crl/intermediate.crl.pem
+policy          = policy_loose
+```
+# Create intermediate CA private key
+```
+cd /root/ca
+openssl genrsa -aes256 \
+      -out intermediate/private/intermediate.key.pem 4096
+
+# Enter pass phrase for intermediate.key.pem: secretpassword
+# Verifying - Enter pass phrase for intermediate.key.pem: secretpassword
+
+chmod 400 intermediate/private/intermediate.key.pem
+```
+# Create CSR for intermediate
+```
+# cd /root/ca
+# openssl req -config intermediate/openssl.cnf -new -sha256 \
+      -key intermediate/private/intermediate.key.pem \
+      -out intermediate/csr/intermediate.csr.pem
+```
+
+# Create intermediate CA certificate and sign with root CA
+```
+cd /root/ca
+openssl ca -config openssl.cnf -extensions v3_intermediate_ca \
+      -days 3650 -notext -md sha256 \
+      -in intermediate/csr/intermediate.csr.pem \
+      -out intermediate/certs/intermediate.cert.pem
+
+chmod 444 intermediate/certs/intermediate.cert.pem
+```
 
 # Create client private key, CSR and certificate and sign with CA
 
